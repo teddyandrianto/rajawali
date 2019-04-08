@@ -64,6 +64,13 @@
     font-weight: bold;
     margin-top: 8px;
   }
+  .box-daftar{
+    margin: 10px;
+    border-color: #000;
+    background-color: #f7f7f7;
+    margin-bottom: 100px;
+    border-radius: 5px;    
+  }
 
   @media only screen and (max-width: 991px) {
   body {
@@ -153,7 +160,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Daftar</a>
+            <a class="nav-link" href="<?php echo base_url('ecommerce/daftar') ?>">Daftar</a>
           </li>
         </ul>
       </div>
