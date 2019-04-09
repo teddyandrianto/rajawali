@@ -88,13 +88,15 @@ dropdown.empty();
 dropdown.append('<option selected="true" disabled>Pilih Provinsi</option>');
 dropdown.prop('selectedIndex', 0);
 
-const url = '<?php echo base_url() ?>/ecommerce/provinsi';
+const url = '<?php echo base_url() ?>ecommerce/provinsi';
 
 // Populate dropdown with list of provinces
 $.getJSON(url, function (data) {
   $.each(data, function (key, entry) {
-    dropdown.append($('<option></option>').attr('value', entry.id_provinsi).text(entry.nama_provinsi));
-
+  	for (var i = 0; i < entry.results.length; i++) {
+    dropdown.append($('<option></option>').attr('value', entry.results[i].province_id).text(entry.results[i].province));
+	}
+    //console.log(entry.results[0].province_id)
   })
 });
 
@@ -107,12 +109,14 @@ $.getJSON(url, function (data) {
 	kota.prop('selectedIndex', 0);
 
 	let kode_prov = $("#locality-dropdown option:selected").attr("value");
-	const url_kota = '<?php echo base_url() ?>/ecommerce/provinsi/'+kode_prov;
+	const url_kota = '<?php echo base_url() ?>/ecommerce/kota/'+kode_prov;
 
 	// Populate dropdown with list of provinces
 	$.getJSON(url_kota, function (data) {
 	  $.each(data, function (key, entry) {
-	    kota.append($('<option></option>').attr('value', entry.id_kota).text(entry.nama_kota));
+	  	for (var i = 0; i < entry.results.length; i++) {
+	    kota.append($('<option></option>').attr('value', entry.results[i].city_id).text(entry.results[i].type+" "+entry.results[i].city_name));
+		}
 	  })
 	});
 
