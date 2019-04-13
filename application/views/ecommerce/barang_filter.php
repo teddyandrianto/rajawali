@@ -12,7 +12,29 @@
           <a href="#" class="list-group-item">Category 3</a>
         </div>
 
+        <br>
+        <div class="list-group">
+          <div class="list-group-item " style="background-color: #f7f7f7;" >Rentan Harga</div>
+          <div class="list-group-item">
+            <form action="<?php echo base_url('ecommerce/filter_barang') ?>" method="GET">
+            <div class="form-group">
+              <input type="hidden" name="cari_barang" value="<?php echo $this->input->get('cari_barang') ?>">
+              <input type="text" class="form-control input-sm" name="min" id="nama" value="<?php echo $this->input->get('min') ?>" placeholder="Min">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control input-sm" name="max" value="<?php echo $this->input->get('max') ?>" id="nama" placeholder="Max">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-success btn-sm pull-right">Tampilkan</button>
+            </div>
+            </form>
+
+          </div>
+          
+        </div>
+
       </div>
+
       <!-- /.col-lg-3 -->
 
       <div class="col-lg-9">
@@ -45,7 +67,7 @@
         </div>
 
         <div class="row">
-          <?php $i=1; foreach ($barang as $b ) { ?>
+          <?php foreach ($barang as $b ) { ?>
           
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
@@ -62,7 +84,7 @@
               </div>
             </div>
           </div>
-        <?php if ($i++ == 6) break;   } ?>
+        <?php } ?>
           
         </div>
         <!-- /.row -->

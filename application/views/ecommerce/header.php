@@ -16,6 +16,7 @@
   <!-- Custom styles for this template -->
   <link href="<?php echo base_url('assets/ecommerce/') ?>css/shop-homepage.css" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
   .serch{
     width: 180%;
@@ -72,6 +73,17 @@
     border-radius: 5px;    
   }
 
+  .mda {
+  
+    background-color: #f7f7f7;
+}
+.box {
+    position: relative;
+    background-color: #f7f7f7;
+    padding: 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
   @media only screen and (max-width: 991px) {
   body {
     background-color: lightblue;
@@ -100,61 +112,67 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="navbar-collapse" id="navbarResponsive">
-      <form class="" role="search" action="http://localhost/rajawali/ecommerce#" method="POST">
-          <input type="text" class="form-control serch" placeholder="Search">
+      <form class="" role="search" action="<?php echo base_url('ecommerce/filter_barang') ?>" method="GET">
+          <input type="text" class="form-control serch" name="cari_barang" value="<?php echo $this->input->get('cari_barang') ?>" placeholder="Search">
       </form>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="dropdown">
-            <a class="nav-link shop-tot" data-toggle="dropdown" href="#"><span class="fas fa-shopping-cart"></span><span class="shop-tot">10</span></a>
+            <a class="nav-link shop-tot" data-toggle="dropdown" href="#"><span class="fas fa-shopping-cart"></span><span class="shop-tot"> <?php echo $this->Model_ecommerce->getkeranjang('sum') ?></span></a>
             <ul class="dropdown-menu">
               <li class="shop-box">
+                <?php $ker = $this->Model_ecommerce->getkeranjang('data');
+                  foreach ($ker as $k) { ?>
                   <a href="#">
                     <div class="media">
                       <div class="media-left">
-                        <img src="http://placehold.it/700x400" class="media-object" style="width:60px; padding:5px; height: 50px">
+                        <img src="<?php echo base_url('assets/ecommerce/barang/').$k->gambar ?>" class="media-object" style="width:60px; padding:5px; height: 50px">
                       </div>
                       <div class="media-body">
-                        <b class="media-heading">nama barang</b><br>
-                        <small>deskripsi barang yang..</small><br>
-                        <small>10 barang</small>
+                        <b class="media-heading"><?=substr($k->nama_barang, 0,15) ?></b><br>
+                        <small><?=$k->jumlah_beli?> barang</small>
                       </div>
                     </div>
                   <hr>
                   </a>
-                   <a href="haj">
-                    <div class="media">
-                      <div class="media-left">
-                        <img src="http://placehold.it/700x400" class="media-object" style="width:60px; padding:5px; height: 50px">
-                      </div>
-                      <div class="media-body">
-                        <b class="media-heading">nama barang</b><br>
-                        <small>deskripsi barang yang..</small><br>
-                        <small>10 barang</small>
-                      </div>
-                    </div>
-                  <hr>
-                  </a>
-                  <center><a class="detail-btn" href="#">lihat keranjang</a></center>
+                <?php } ?>
+                  
+                  <center><a class="detail-btn" href="<?php echo base_url('ecommerce/keranjang') ?>">lihat keranjang</a></center>
                 </li>
             </ul>
           </li>
+          <?php if($_SESSION['login']['role']==2){ ?>
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url('ecommerce/transaksi') ?>"><span class="fa fa-exchange"></span></a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#"><?=$_SESSION['login']['nama']?></a>
+              <ul class="dropdown-menu" style="width: -10px">
+                <li class="nav-item">
+                  <a style="color: #000"  class="nav-link" href="<?php echo base_url('ecommerce/setting') ?>">Pengaturan akun</a>
+                </li>
+                <li class="nav-item">
+                  <a style="color: #000"  class="nav-link" href="<?php echo base_url('landing/logout') ?>">logout</a>
+                </li>
+             </ul>
+          </li>
+          <?php }else{ ?>
           <li class="dropdown">
             <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Login</a>
             <ul class="dropdown-menu">
              <div class="box-login">
-               <form>
+               <form action="<?php echo base_url('landing/autentifikasi_login') ?>" method="POST" >
                  <div class="form-group">
                   <label for="email">Email address:</label>
-                  <input type="email" class="form-control" id="email">
+                  <input type="email" class="form-control" id="username" name="email">
                 </div>
                 <div class="form-group">
                   <label for="pwd">Password:</label>
-                  <input type="password" class="form-control" id="pwd">
+                  <input type="password" class="form-control" name="password" id="password">
                 </div>
-                <button type="submit" class="btn btn-success btn-block">Submit</button>
+                <button type="submit" class="btn btn-success btn-block">login</button>
                </form>
              </div>
             </ul>
@@ -162,6 +180,7 @@
           <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url('ecommerce/daftar') ?>">Daftar</a>
           </li>
+        <?php } ?>
         </ul>
       </div>
     </div>

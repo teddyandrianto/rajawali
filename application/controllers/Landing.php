@@ -26,7 +26,7 @@ class Landing extends CI_Controller {
 			if($_SESSION['login']['role']==1){
 				echo "login role 1";	
 			}elseif($_SESSION['login']['role']==2){
-				echo "login role 2";	
+				redirect('ecommerce');	
 			}
 		}else{
 			echo "login Gagal";
