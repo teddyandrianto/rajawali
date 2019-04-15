@@ -130,12 +130,13 @@ $curl = curl_init();
 		}else{
 			$insertdata = array(
 				'nama' => $this->input->post('nama'),
-				'email' => $this->input->post('email'),
+				'username' => $this->input->post('email'),
 				'password' => md5($this->input->post('password')),
-				'role' => 2,
+				'status' => 3,
 				'alamat' => $this->input->post('alamat'),
-				'id_provinsi' => $this->input->post('id_provinsi'),
-				'id_kota' => $this->input->post('id_kota'),
+				'provinsi_id' => $this->input->post('id_provinsi'),
+				'kota_id' => $this->input->post('id_kota'),
+				'telpon' => $this->input->post('telpon'),
 			);
 			$res = $this->db->insert('tbl_user',$insertdata);
 
@@ -149,7 +150,7 @@ $curl = curl_init();
 		}
 	}
 
-	 public function send_mail() { 
+/*	public function send_mail() { 
 
          $from_email = "andrianto.teddy@gmail.com"; 
          $to_email = "elgorithm69@gmail.com"; 
@@ -179,7 +180,7 @@ $curl = curl_init();
                 $this->session->set_flashdata("notif","Email gagal dikirim."); 
                 $this->load->view('home'); 
          } 
-      }
+    }*/
 
       public function barang($id_barang){
       	$barang_view = $this->Model_ecommerce->getbarang($id_barang);
@@ -189,88 +190,94 @@ $curl = curl_init();
       }
 
       public function tambah_keranjang($id_barang=0){
-      	$transaksi = $this->db->query("SELECT id_transaksi FROM tbl_transaksi WHERE id_user=".$_SESSION['login']['id_user']." AND status=1")->row();
-   
-      	if(isset($transaksi)){
-		      	$cek_barang=  $this->db->query("SELECT * FROM tbl_detail_transaksi JOIN tbl_transaksi ON tbl_transaksi.id_transaksi=tbl_detail_transaksi.id_transaksi WHERE id_barang=".$id_barang." AND id_user=".$_SESSION['login']['id_user']." AND tbl_transaksi.status=1")->row();
-		      	
-		      	if(isset($cek_barang)){
-		      		$dataupdate = array('jumlah_beli'=>$cek_barang->jumlah_beli+$this->input->post('jumlah'));
-		      		$where = array('id_detail_transaksi' => $cek_barang->id_detail_transaksi
-		      	);
-			      	$res = $this->db->update('tbl_detail_transaksi',$dataupdate,$where);
+      	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      	$transaksi = $this->db->query("SELECT id_transaksi FROM tbl_transaksi WHERE id_user=".$_SESSION['login']['id_user']." AND status=1")->row();
+	   
+	      	if(isset($transaksi)){
+			      	$cek_barang=  $this->db->query("SELECT * FROM tbl_detail_transaksi JOIN tbl_transaksi ON tbl_transaksi.id_transaksi=tbl_detail_transaksi.id_transaksi WHERE id_barang=".$id_barang." AND id_user=".$_SESSION['login']['id_user']." AND tbl_transaksi.status=1")->row();
+			      	
+			      	if(isset($cek_barang)){
+			      		$dataupdate = array('jumlah_beli'=>$cek_barang->jumlah_beli+$this->input->post('jumlah'));
+			      		$where = array('id_detail_transaksi' => $cek_barang->id_detail_transaksi
+			      	);
+				      	$res = $this->db->update('tbl_detail_transaksi',$dataupdate,$where);
+				      	if($res>=1){
+				      		redirect('ecommerce/barang/'.$id_barang);
+				      	}else{
+				      		redirect('ecommerce/barang/'.$id_barang);
+				      	}
+				      }else{
+				      	$barang = $this->Model_ecommerce->getbarang($id_barang);
+				      	$datainsert = array(
+				      		'jumlah_beli'=> $this->input->post('jumlah'),
+				      		'id_transaksi'=> $transaksi->id_transaksi,
+				      		'harga_beli' => $barang->harga_beli,
+			      			'harga_jual' =>$barang->harga_jual,
+				      		'id_barang'=>$id_barang,
+				      		'waktu' => date("Y-m-d H:i:s")
+
+				     	 );
+				      	$res = $this->db->insert('tbl_detail_transaksi',$datainsert);
+					      	if($res>=1){
+					      		redirect('ecommerce/barang/'.$id_barang);
+					      	}else{
+					      		redirect('ecommerce/barang/'.$id_barang);
+					      	}	
+				      }
+
+	      	}else{
+	      		$input_data = array(
+	      			'id_user' => $_SESSION['login']['id_user'],
+	      			'status' => '1'
+
+	      		);
+	      		$res = $this->db->insert('tbl_transaksi',$input_data);
+
+	      		if($res>=1){
+	      			$transaksi = $this->db->query("SELECT * FROM tbl_transaksi WHERE id_user=".$_SESSION['login']['id_user']." AND status=1")->row();
+		      		$barang = $this->Model_ecommerce->getbarang($id_barang);
+		      		$datainput = array(
+		      			'id_transaksi'=> $transaksi->id_transaksi,
+			      		'id_barang' => $id_barang ,
+			      		'harga_beli' => $barang->harga_beli,
+			      		'harga_jual' =>$barang->harga_jual,
+			      		'jumlah_beli' => $this->input->post('jumlah'),
+			      		'waktu' => date("Y-m-d H:i:s")
+				     );
+
+			      	$res = $this->db->insert('tbl_detail_transaksi',$datainput);
 			      	if($res>=1){
 			      		redirect('ecommerce/barang/'.$id_barang);
 			      	}else{
 			      		redirect('ecommerce/barang/'.$id_barang);
 			      	}
-			      }else{
-			      	$barang = $this->Model_ecommerce->getbarang($id_barang);
-			      	$datainsert = array(
-			      		'jumlah_beli'=> $this->input->post('jumlah'),
-			      		'id_transaksi'=> $transaksi->id_transaksi,
-			      		'harga_beli' => $barang->harga_beli,
-		      			'harga_jual' =>$barang->harga_jual,
-			      		'id_barang'=>$id_barang,
-			      		'waktu' => date("Y-m-d H:i:s")
+		      }else{
+		      	echo "buat transaksi baru gagal";
+		      }
+	      	}
+	    }else{
+	    	redirect('ecommerce/daftar');
+	    }
+    }
 
-			     	 );
-			      	$res = $this->db->insert('tbl_detail_transaksi',$datainsert);
-				      	if($res>=1){
-				      		redirect('ecommerce/barang/'.$id_barang);
-				      	}else{
-				      		redirect('ecommerce/barang/'.$id_barang);
-				      	}	
-			      }
+    public function keranjang(){
+	    if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){  	
+	      	$keranjang = $this->Model_ecommerce->getkeranjang('data');
+	      	$this->load->view('ecommerce/header');
+	      	$this->load->view('ecommerce/keranjang',['keranjang'=>$keranjang]);
+	      	$this->load->view('ecommerce/footer');
+	    }else{
+	    	////
+	    }
+    }
 
-      	}else{
-      		$input_data = array(
-      			'id_user' => $_SESSION['login']['id_user'],
-      			'status' => '1'
-
-      		);
-      		$res = $this->db->insert('tbl_transaksi',$input_data);
-
-      		if($res>=1){
-      			$transaksi = $this->db->query("SELECT * FROM tbl_transaksi WHERE id_user=".$_SESSION['login']['id_user']." AND status=1")->row();
-	      		$barang = $this->Model_ecommerce->getbarang($id_barang);
-	      		$datainput = array(
-	      			'id_transaksi'=> $transaksi->id_transaksi,
-		      		'id_barang' => $id_barang ,
-		      		'harga_beli' => $barang->harga_beli,
-		      		'harga_jual' =>$barang->harga_jual,
-		      		'jumlah_beli' => $this->input->post('jumlah'),
-		      		'waktu' => date("Y-m-d H:i:s")
-			     );
-
-		      	$res = $this->db->insert('tbl_detail_transaksi',$datainput);
-		      	if($res>=1){
-		      		redirect('ecommerce/barang/'.$id_barang);
-		      	}else{
-		      		redirect('ecommerce/barang/'.$id_barang);
-		      	}
-	      }else{
-	      	echo "buat transaksi baru gagal";
-	      }
-
-      	}
-      	
-
-      }
-
-      public function keranjang(){
-      	$keranjang = $this->Model_ecommerce->getkeranjang('data');
-      	$this->load->view('ecommerce/header');
-      	$this->load->view('ecommerce/keranjang',['keranjang'=>$keranjang]);
-      	$this->load->view('ecommerce/footer');
-      }
-
-      public function filter_barang(){
+    public function filter_barang(){
       	if($this->input->get('cari_barang')){
       	$nama = $this->input->get('cari_barang');
+      	$id_kategori = $this->input->get('id_kategori');
       	$min =  $this->input->get('min');
       	$max = $this->input->get('max');
-      	$barang = $this->Model_ecommerce->getfilterbarang($nama,$min,$max);
+      	$barang = $this->Model_ecommerce->getfilterbarang($nama,$id_kategori,$min,$max);
       	$this->load->view('ecommerce/header',$nama);
       	$this->load->view('ecommerce/barang_filter',['barang'=>$barang]);
       	$this->load->view('ecommerce/footer');
@@ -280,6 +287,7 @@ $curl = curl_init();
       }
 
       public function proses_transaksi(){
+      	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
       		$transaksi = $this->db->query("SELECT id_transaksi FROM tbl_transaksi WHERE id_user=".$_SESSION['login']['id_user']." AND status=1")->row();
 
       		echo $total_barang = $this->Model_ecommerce->getkeranjang('sum_harga');
@@ -303,23 +311,538 @@ $curl = curl_init();
 
       			}
       		}
+      	}else{
+      		////
+      	}
 
-      }
+    }
 
-      public function detail_transaksi($id_transaksi=0){
-      	$barang = $this->Model_ecommerce->getbarang_transaksi($id_transaksi);
-      	$transaksi = $this->Model_ecommerce->getdatatransaksi($id_transaksi);
-      	$this->load->view('ecommerce/header');
-      	$this->load->view('ecommerce/detail_transaksi',['barang'=>$barang,'transaksi'=>$transaksi]);
-      	$this->load->view('ecommerce/footer');
+    public function detail_transaksi($id_transaksi=0){
+      	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      	$barang = $this->Model_ecommerce->getbarang_transaksi($id_transaksi);
+	      	$transaksi = $this->Model_ecommerce->getdatatransaksi($id_transaksi);
+	      	$this->load->view('ecommerce/header');
+	      	$this->load->view('ecommerce/detail_transaksi',['barang'=>$barang,'transaksi'=>$transaksi]);
+	      	$this->load->view('ecommerce/footer');
+	    }else{
+	    	////
+	    }
+    }
 
-      }
+    public function transaksi(){
+      	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      	$transaksi = $this->Model_ecommerce->gettransaksi();
+	      	$this->load->view('ecommerce/header');
+	      	$this->load->view('ecommerce/data_transaksi',['transaksi'=>$transaksi]);
+	      	$this->load->view('ecommerce/footer');
+	    }else{
+	    	////
+	    }
+    }
 
-      public function transaksi(){
-      	$transaksi = $this->Model_ecommerce->gettransaksi();
-      	$this->load->view('ecommerce/header');
-      	$this->load->view('ecommerce/data_transaksi',['transaksi'=>$transaksi]);
-      	$this->load->view('ecommerce/footer');
+    public function profile(){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      	$transaksi = $this->Model_ecommerce->gettransaksi();
+	      	$this->load->view('ecommerce/header');
+	      	$this->load->view('ecommerce/profile');
+	      	$this->load->view('ecommerce/footer');
+	    }else{
+	    	////
+	    }
 
-      }
+    }
+
+    public function ubah_umum(){
+      	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      	$update_data = array(
+	      		'nama' => $this->input->post('nama'),
+	      		'telpon' => $this->input->post('telpon')
+	      	);
+
+	      	$where = array('id_user'=>$_SESSION['login']['id_user']);
+	      	$res = $this->db->update('tbl_user',$update_data,$where);
+	      	if($res>=1){
+	      		$_SESSION['login']['nama']=$this->input->post('nama');
+	      		$_SESSION['login']['telpon']=$this->input->post('telpon');
+	      		redirect('ecommerce/profile');
+	      	}else{
+	      		redirect('ecommerce/profile');
+	      	}
+	    }else{
+	    	////
+	    }
+    }
+
+    public function ubah_alamat(){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      	$update_data = array(
+	      		'kota_id' => $this->input->post('kota'),
+	      		'provinsi_id' => $this->input->post('provinsi'),
+	      		'alamat' => $this->input->post('alamat')
+	      	);
+	      	$where = array('id_user'=>$_SESSION['login']['id_user']);
+	      	$res = $this->db->update('tbl_user',$update_data,$where);
+	      	if($res>=1){
+	      		$_SESSION['login']['kota_id']=$this->input->post('kota');
+	      		$_SESSION['login']['provinsi_id']=$this->input->post('provinsi');
+	      		$_SESSION['login']['alamat']=$this->input->post('alamat');
+	      		redirect('ecommerce/'.$this->input->post('url'));
+	      	}else{
+	      		redirect('ecommerce/'.$this->input->post('url'));
+	      	}
+	    }else{
+	    	////
+	    }
+    }
+
+    public function ubah_password(){
+      	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){
+	      $password_lama = md5($this->input->post('password_lama'));
+	      if($password_lama==$_SESSION['login']['password']){
+	      	$update_data = array(
+	      		'password' => md5($this->input->post('password_baru'))
+	      	);
+
+	      	$where = array('id_user'=>$_SESSION['login']['id_user']);
+	      	$res = $this->db->update('tbl_user',$update_data,$where);
+	      	if($res>=1){
+	      		redirect('ecommerce/profile');
+	      	}else{
+	      		redirect('ecommerce/profile');
+	      	}
+	      }else{
+	      	redirect('ecommerce/profile');	
+	      }
+	    }else{
+	    	//
+	    }
+    }
+
+
+    //batas controler web dan admin
+
+    public function admin_dashboard(){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+	    	$this->load->view('ecommerce/admin/header');
+	    	$this->load->view('ecommerce/admin/dashboard');
+	    	$this->load->view('ecommerce/admin/footer');
+	    }else{
+	    	///
+    	}
+    }
+
+    public function admin_input_kategori(){
+       	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+	    	$datainsert = array(
+	    		'kategori'=>$this->input->post('kategori')
+	    	);
+	    	$res = $this->db->insert('tbl_kategori_barang',$datainsert);
+	    	if($rse>=1){
+	    		redirect('ecommerce/admin_dashboard');
+	    	}else{
+	    		redirect('ecommerce/admin_dashboard');
+	    	}
+	    }else{
+	    	
+	    }
+    }
+
+    public function admin_update_kategori($id_kategori=''){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+			$dataupdate = array(
+				'kategori'=>$this->input->post('kategori')
+			);
+			$where = array('id_kategori'=>$id_kategori);
+			$res = $this->db->update('tbl_kategori_barang',$dataupdate,$where);
+			if($rse>=1){
+				redirect('ecommerce/admin_dashboard');
+			}else{
+				redirect('ecommerce/admin_dashboard');
+			}
+    	}else{
+    		$this->load->view('error404');  
+    	}
+    }
+
+    public function admin_delete_kategori($id_kategori=''){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+	    	$where = array('id_kategori'=>$id_kategori);
+	    	$res = $this->db->delete('tbl_kategori_barang',$where);
+	    	if($rse>=1){
+	    		redirect('ecommerce/admin_dashboard');
+	    	}else{
+	    		redirect('ecommerce/admin_dashboard');
+	    	}
+	    }else{
+	    	$this->load->view('error404');  
+	    }
+    }
+
+    public function admin_barang(){
+    	$barang = $this->Model_ecommerce->getbarang(0);
+    	$kategori = $this->Model_ecommerce->getkategori();
+    	$this->load->view('ecommerce/admin/header');
+    	$this->load->view('ecommerce/admin/barang',['barang'=>$barang,'kategori'=>$kategori]);
+    	$this->load->view('ecommerce/admin/footer');
+    }
+
+      public function admin_input_barang(){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+    		$this->load->library('upload');
+		        $nmfile = "file_".time(); //nama file saya beri nama langsung dan diikuti fungsi time
+		        $config['upload_path'] = './assets/ecommerce/barang/'; //path folder
+		        $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
+		        $config['max_size'] = '500048';
+		        $config['file_name'] = $nmfile; //nama yang terupload nantinya
+		 
+		        $this->upload->initialize($config);
+		         
+		        if(isset($_FILES['filefoto']['name']))
+		        {
+		            if ($this->upload->do_upload('filefoto'))
+		            {
+
+		                $gbr = $this->upload->data();
+		               	$nama_barang = $this->input->post('nama_barang');;
+			    		$id_kategori = $this->input->post('id_kategori');
+			    		$harga_jual = $this->input->post('harga_jual');
+			    		$harga_beli = $this->input->post('harga_beli');
+			    		$stok = $this->input->post('stok');
+			    		$deskripsi = $this->input->post('deskripsi');
+			    		$berat = $this->input->post('berat');
+					    $inputdata=array(
+					    	'nama_barang'=>$nama_barang,
+					    	'id_kategori'=>$id_kategori,
+					    	'harga_jual'=>$harga_jual,
+					    	'harga_beli'=>$harga_beli,
+					    	'stok'=>$stok,
+					    	'deskripsi'=>$deskripsi,
+					    	'berat'=>$berat,
+		                  	'gambar' =>$gbr['file_name']
+		                );
+		                $res = $this->db->insert('tbl_barang',$inputdata);
+		                if($res>=1){
+                             redirect('ecommerce/admin_barang');  
+		                }else{
+
+                            redirect('ecommerce/admin_barang');    
+                        }}else{
+			              redirect('ecommerce/admin_barang');  
+		            }
+		        }else{
+		        	redirect('ecommerce/admin_barang');  
+		        }
+
+    	}else{
+    		$this->load->view('error404');	
+    	}
+    }
+
+	public function admin_ubah_barang_gambar($id_barang=''){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+    			$this->load->library('upload');
+		        $nmfile = "file_".time(); //nama file saya beri nama langsung dan diikuti fungsi time
+		        $config['upload_path'] = './assets/ecommerce/barang/'; //path folder
+		        $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
+		        $config['max_size'] = '500048';
+		        $config['file_name'] = $nmfile; //nama yang terupload nantinya
+		 
+		        $this->upload->initialize($config);
+		         
+		        if(isset($_FILES['filefoto']['name']))
+		        {
+		            if ($this->upload->do_upload('filefoto'))
+		            {
+		                $gbr = $this->upload->data();
+		                $updatedata = array(
+		                  'gambar' =>$gbr['file_name']
+		                   );
+		                $where = array('id_barang' => $id_barang);
+		                $res = $this->db->update('tbl_barang',$updatedata,$where); //akses model untuk menyimpan ke database
+		                if($res>=1){
+		                   redirect('ecommerce/admin_barang');  
+		                }else{
+                          redirect('ecommerce/admin_barang');  
+                        }}else{
+		               redirect('ecommerce/admin_barang');  
+		        }}else{
+		        	redirect('ecommerce/admin_barang');  
+		        }
+    	}else{
+            $this->load->view('error404');  
+        }
+    }
+
+
+    public function admin_ubah_barang($id_barang=''){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+    		
+		    $updatebarang=array(
+		    	'nama_barang'=>$this->input->post('nama_barang'),
+		    	'id_kategori'=>$this->input->post('id_kategori'),
+		    	'harga_jual'=>$this->input->post('harga_jual'),
+		    	'harga_beli'=>$this->input->post('harga_beli'),
+		    	'stok'=>$this->input->post('stok'),
+		    	'deskripsi'=>$this->input->post('deskripsi'),
+		    	'berat'=>$this->input->post('berat')
+		    );
+		    $where = array('id_barang' => $id_barang);
+            $res = $this->db->update('tbl_barang',$updatebarang,$where);
+            if($res>=1){
+            	redirect('ecommerce/admin_barang');  
+            }else{
+            	redirect('ecommerce/admin_barang');
+        	}
+    	}else{
+    		$this->load->view('error404');	
+    	}
+    }
+
+
+    public function admin_hapus_barang($id=''){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+	    	$where = array('id_barang' => $id);
+		 	$res = $this->db->delete('tbl_barang',$where);
+		 	if($res>=1){
+                redirect('ecommerce/admin_barang');
+		 	}else{
+                redirect('ecommerce/admin_barang');
+		 	}
+    	}else{
+    		$this->load->view('error404');	
+    	}
+    
+	}
+
+	  public function admin_input_carousel(){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+    		$this->load->library('upload');
+		        $nmfile = "file_".time(); //nama file saya beri nama langsung dan diikuti fungsi time
+		        $config['upload_path'] = './assets/ecommerce/img/carosel'; //path folder
+		        $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
+		        $config['max_size'] = '500048';
+		        $config['file_name'] = $nmfile; //nama yang terupload nantinya
+		 
+		        $this->upload->initialize($config);
+		         
+		        if(isset($_FILES['filefoto']['name']))
+		        {
+		            if ($this->upload->do_upload('filefoto'))
+		            {
+
+		                $gbr = $this->upload->data();
+					    $inputdata=array(
+					    	'judul'=>$this->input->post('judul'),
+					    	'link'=>$this->input->post('link'),
+					    	'deskripsi'=>$this->input->post('deskripsi'),
+		                  	'gambar' =>$gbr['file_name']
+		                );
+		                $res = $this->db->insert('tbl_carousel',$inputdata);
+		                if($res>=1){
+                             redirect('ecommerce/admin_dashboard');  
+		                }else{
+
+                            redirect('ecommerce/admin_dashboard');    
+                        }}else{
+			              redirect('ecommerce/admin_dashboard');  
+		            }
+		        }else{
+		        	redirect('ecommerce/admin_dashboard');  
+		        }
+
+    	}else{
+    		$this->load->view('error404');	
+    	}
+    }
+
+     public function admin_hapus_carousel($id=''){
+    	if(isset($_SESSION['login']) AND $_SESSION['login']['role']==1){
+	    	$where = array('id_carousel' => $id);
+		 	$res = $this->db->delete('tbl_carousel',$where);
+		 	if($res>=1){
+                redirect('ecommerce/admin_dashboard');
+		 	}else{
+                redirect('ecommerce/admin_dashboard');
+		 	}
+    	}else{
+    		$this->load->view('error404');	
+    	}
+    
+	}
+
+	// public function admin_pegawai(){
+	// 	if($_SESSION['login']['status']=='1'){
+	// 		$pegawai = $this->Model_ecommerce->getpegawai();
+	// 		$this->load->view('ecommerce/admin/header');
+	// 		$this->load->view('ecommerce/admin/data_pegawai',['pegawai'=>$pegawai]);
+	// 		$this->load->view('ecommerce/admin/footer');
+	// 	}else{
+	// 		redirect('landing');
+	// 	}
+	// }
+
+	// public function admin_input_pegawai(){
+	//   	if($_SESSION['login']['status']=='1'){
+	//   		$cek_username = $this->db->query("SELECT * FROM tbl_user WHERE username='".$_POST['username']."'")->row();
+	// 		if(empty($cek_username->username)){
+	// 		$username  = $_POST['username'];
+	// 		$nama_user = $_POST['nama_user'];
+	// 		$telpon = $_POST['telpon'];
+	// 		$status = $_POST['status'];
+	// 		$password = md5($_POST['password']);
+	// 		$inputdata = array(
+	//           'username' => $username,
+	//           'nama_user' => $nama_user,
+	//           'telpon' =>$telpon,
+	//           'status' =>$status,
+	//           'password' => $password
+	//       	);
+	//       	$res = $this->Admin_model->input('tbl_user',$inputdata);
+	//         if($res>=1){
+	//         	if($status==3){
+	//         		$query= $this->db->query('SELECT max(id_trx)+1 as jml FROM tbl_transaksi');
+	//  				$row=$query->row();
+	//  				$kodetransaksi =$row->jml;
+	//  				$char = "TR";
+	// 				$id_transaksi = $char . sprintf("%08s",$kodetransaksi);
+	// 				$id_user = $this->db->query("SELECT max(id_user) as hasil FROM tbl_user")->row();		
+	// 				$inputdata = array(
+	// 					'id_transaksi' => $id_transaksi,
+	// 					'id_kasir' => $id_user->hasil,
+	// 					'status' => 0
+	// 					);
+	// 				$res = $this->Admin_model->input('tbl_transaksi',$inputdata);
+	//         	}
+	//             $this->session->set_flashdata("pesan", '<script> alert("Input Pegawai dengan'.$nama_user.' Berhasil"); </script>');
+	//             redirect('admin/pegawai');
+	//         }else{
+	//         	$this->session->set_flashdata("pesan", '<script> alert("Maaf Input Pegawai Gagal"); </script>');
+	//             redirect('admin/pegawai');
+	//         }
+	//     }else{
+	//     	$this->session->set_flashdata("pesan", '<script> alert("Maaf Input Pegawai Gagal, Username Sudah Tersedia"); </script>');
+	//         redirect('admin/pegawai');
+	//     }
+	//     }else{
+	// 		redirect('landing');
+	// 	}
+	// }
+
+	// public function admin_ubah_pegawai($id_user,$username){
+	// 	if($_SESSION['login']['status']=='1'){
+	// 		$cek_username = $this->db->query("SELECT * FROM tbl_user WHERE username='".$_POST['username']."'")->row();
+	// 		if(empty($cek_username->username) or $cek_username->username==$username){
+	// 		$nama_user = $_POST['nama_user'];
+	// 		$telpon = $_POST['telpon'];
+	// 		$status = $_POST['status'];
+	// 		if($_POST['password']==null){
+	// 			$datapassword = $this->db->query("SELECT password FROM tbl_user WHERE id_user='".$id_user."'")->row();
+	// 			$password = $datapassword->password;
+	// 		}else{
+	// 			$password = md5($_POST['password']);
+	// 		}
+	// 		$ubahdata = array(
+	//           'username' => $username,
+	//           'nama_user' => $nama_user,
+	//           'telpon' =>$telpon,
+	//           'status' =>$status,
+	//           'password' => $password
+	// 	    );
+	// 		$where = array('id_user'=>$id_user);
+	// 	    $res = $this->Admin_model->update('tbl_user',$ubahdata,$where);
+	// 	    if($res>=1){
+	// 	        $this->session->set_flashdata("pesan", '<script>alert("Ubah Pegawai dengan'.$nama_user.' Berhasil"); </script>');
+	// 	        redirect('admin/pegawai');
+	// 	    }else{
+	// 	    	$this->session->set_flashdata("pesan", '<script>alert("Maaf Ubah Pegawai Gagal"); </script>');
+	// 	        redirect('admin/pegawai');
+	// 		}
+	// 	}else{
+	// 		$this->session->set_flashdata("pesan", '<script>alert("Maaf Ubah Pegawai Gagal, Username Sudah Tersedia"); </script>');
+	// 	        redirect('admin/pegawai');
+	// 		}
+		
+	//     }else{
+	// 		redirect('landing');
+	// 	} 
+	// }
+
+	// public function admin_hapus_pegawai($id_user){
+	// 	if($_SESSION['login']['status']=='1'){
+	// 		$where = array('id_user'=>$id_user);
+	//       	$res = $this->Admin_model->delete('tbl_user',$where);
+ //          	if($res>=1){
+ //               $this->session->set_flashdata("pesan", '<script>alert("Hapus pegawai Berhasil");</script>');
+ //               redirect('admin/pegawai');
+ //          	}else{
+ //           		$this->session->set_flashdata("pesan", '<script> alert("Maaf Hapus Pegawai Gagal");</script>');
+ //            	redirect('admin/pegawai');
+ //          	} 
+	//     }else{
+	// 		redirect('landing');
+	// 	}
+	// }
+
+	// public function admin_profile()
+ //  {
+ //    if($_SESSION['login']['status']==1){
+ //    $this->load->view('admin/header');
+ //    $this->load->view('admin/profile_admin');
+ //    $this->load->view('admin/footer');
+ //    }else{
+ //      redirect('landing');
+ //    }
+ //  }
+
+ //   public function admin_update_password(){
+ //    if($_SESSION['login']['status']==1){
+ //    $password_lama=(md5($_POST['password_lama']));
+ //      $password_baru=$_POST['password_baru'];
+ //      $password_confrim=$_POST['password_confrim'];
+ //      if($password_lama==$_SESSION['login']['password']){
+ //      if($_POST['password_lama']!=$_POST['password_baru']){
+ //      if($password_baru==$password_confrim ){
+ //        $password=(md5($password_baru));
+ //        $updatepass = array(
+ //      'password' => $password,   
+ //      );
+ //      $where = array('id_user' => $_SESSION['login']['id_user']);
+ //      $res = $this->Admin_model->update('tbl_user',$updatepass,$where);
+ //      if($res>=1){
+ //          $_SESSION['login']['password'] = $password;
+ //         $this->session->set_flashdata("pesan", '<script>
+ //          alert("Ubah Password Berhasil");
+ //            </script>');
+ //          redirect('admin/profile/');
+ //      }else{
+ //          $this->session->set_flashdata("pesan", '<script>
+ //          alert("Ubah Password Gagal");
+ //            </script>');
+ //          redirect('admin/profile/');
+ //      }
+ //      }else{
+ //      	$this->session->set_flashdata("pesan", '<script>
+ //          alert("Konfirmasi Password tidak valid !");
+ //            </script>');
+
+ //          redirect('admin/profile/');
+ //      }
+ //          }else{
+ //          	$this->session->set_flashdata("pesan", '<script>
+ //          alert("Password baru Tidak boleh sama dengan password Lama !");
+ //            </script>');
+ //          redirect('admin/profile/');
+ //  }
+ //  }else{
+ //  	 $this->session->set_flashdata("pesan", '<script>
+ //          alert("Password Lama Yang Dimasukan Salah");
+ //            </script>');
+ //          redirect('admin/profile/');
+ //  }
+ //    }else{
+ //      redirect('landing');
+ //    }
+ //  } 
+
+
 }

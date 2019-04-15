@@ -24,7 +24,7 @@ class Landing extends CI_Controller {
 		$this->Model_login->verivikasi_login();
 		if(isset($_SESSION['login'])){
 			if($_SESSION['login']['role']==1){
-				echo "login role 1";	
+				redirect('ecommerce/admin_dashboard');	
 			}elseif($_SESSION['login']['role']==2){
 				redirect('ecommerce');	
 			}

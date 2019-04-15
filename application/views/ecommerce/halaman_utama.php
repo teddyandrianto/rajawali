@@ -7,9 +7,12 @@
 
         <h3 class="mk-5">Kategori</h3>
         <div class="list-group">
-          <a href="#" class="list-group-item">Category 1</a>
-          <a href="#" class="list-group-item">Category 2</a>
-          <a href="#" class="list-group-item">Category 3</a>
+          <?php
+            $kategori =$this->Model_ecommerce->getkategori();
+            foreach ($kategori as $kat) {
+           ?>
+          <a href="<?php echo base_url("ecommerce/filter_barang?cari_barang= &id_kategori=".$kat->id_kategori."") ?>" class="list-group-item"><?php echo $kat->kategori ?></a>
+        <?php } ?>
         </div>
 
       </div>
@@ -19,20 +22,33 @@
 
         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
           <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+              <?php $carousel = $this->Model_ecommerce->getcarousel();
+            $no=0;
+            foreach ($carousel as $c ) { 
+              if($no==0){ ?>
+            <li data-target="#carouselExampleIndicators" data-slide-to="<?php echo $no ?>" class="active"></li>
+          <?php }else{ ?>
+            <li data-target="#carouselExampleIndicators" data-slide-to="<?php echo $no ?>" ></li>
+            <?php  } $no++; } ?>
+          }
           </ol>
           <div class="carousel-inner" role="listbox">
-            <div class="carousel-item active">
-              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="First slide">
+            <?php $no=0;
+            foreach ($carousel as $c ) { 
+              $no++;
+              if($no==1){ ?>
+            <div class="carousel-item active" >
+            <?php }else{ ?>
+              <div class="carousel-item" >
+            <?php } ?>
+              <img class="d-block img-fluid" src="<?php echo base_url('assets/ecommerce/img/carosel/').$c->gambar ?>" alt="First slide">
+                <div class="carousel-caption d-none d-md-block">
+                  <h5 style="font-weight: bold;"><?php echo $c->judul ?></h5>
+                  <p><?php echo $c->deskripsi ?></p>
+                  <a class="btn btn-success btn-sm" href="<?php echo $c->link ?>">Lihat Detail Informasi</a>
+                </div>
             </div>
-            <div class="carousel-item">
-              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Third slide">
-            </div>
+          <?php } ?>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

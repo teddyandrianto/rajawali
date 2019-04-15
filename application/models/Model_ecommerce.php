@@ -13,6 +13,7 @@ class Model_ecommerce extends CI_Model {
 		}else{
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
+		$this->db->join('tbl_kategori_barang','tbl_kategori_barang.id_kategori=tbl_barang.id_kategori');
 		$this->db->order_by("id_barang", "asc");
 		$query = $this->db->get();
 
@@ -50,10 +51,11 @@ class Model_ecommerce extends CI_Model {
 		}
 	}
 
-	public function getfilterbarang($nama,$min=0,$max=0){
+	public function getfilterbarang($nama='',$id_kategori='',$min=0,$max=0){
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
 		$this->db->like('nama_barang',$nama);
+		$this->db->like('id_barang',$id_kategori);
 		if($max>0 AND $min<=$max){
 		$this->db->where('harga_jual>=',$min);
 		$this->db->where('harga_jual<=',$max);
@@ -89,6 +91,14 @@ class Model_ecommerce extends CI_Model {
 		$this->db->where('id_user',$_SESSION['login']['id_user']);
 		$query = $this->db->get();
 		return $query->result();
+	}
+
+	public function getkategori(){
+		return $this->db->get('tbl_kategori_barang')->result();
+	}
+
+	public function getcarousel(){
+		return $this->db->get('tbl_carousel')->result();
 	}
 
 

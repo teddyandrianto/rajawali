@@ -18,17 +18,16 @@
             <p>Status</p>
             <p style="background-color: #6666;padding: 4px; border-radius: 3px; text-align: center;" class="media-heading"><span class="label label-default">
               <?php 
-              if($d->status==2){
-                  echo "Belum dibayar";
-              }elseif ($d->status==3) {
-                echo "sudah dibayar";
-              }elseif ($d->status==4) {
-                echo "Dalam Pengiriman";
-              }elseif ($d->status==5) {
-                echo "Telah diterima";
-              }
+                  if($d->status==2){
+                      echo "Belum dibayar";
+                  }elseif ($d->status==3) {
+                    echo "sudah dibayar";
+                  }elseif ($d->status==4) {
+                    echo "Dalam Pengiriman";
+                  }elseif ($d->status==5) {
+                    echo "Telah diterima";
+                  }
                   ;?>
-    
               </span></p>
           </div>
           <div class="col-md-3">

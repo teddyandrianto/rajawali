@@ -113,12 +113,13 @@
       </button>
       <div class="navbar-collapse" id="navbarResponsive">
       <form class="" role="search" action="<?php echo base_url('ecommerce/filter_barang') ?>" method="GET">
-          <input type="text" class="form-control serch" name="cari_barang" value="<?php echo $this->input->get('cari_barang') ?>" placeholder="Search">
+          <input type="text" class="form-control serch" name="cari_barang" value="<?php echo $this->input->get('cari_barang') ?>" placeholder="Search" required>
       </form>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>
           </li>
+          <?php if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){ ?>
           <li class="dropdown">
             <a class="nav-link shop-tot" data-toggle="dropdown" href="#"><span class="fas fa-shopping-cart"></span><span class="shop-tot"> <?php echo $this->Model_ecommerce->getkeranjang('sum') ?></span></a>
             <ul class="dropdown-menu">
@@ -143,7 +144,7 @@
                 </li>
             </ul>
           </li>
-          <?php if($_SESSION['login']['role']==2){ ?>
+          
           <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url('ecommerce/transaksi') ?>"><span class="fa fa-exchange"></span></a>
           </li>
@@ -151,7 +152,7 @@
             <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#"><?=$_SESSION['login']['nama']?></a>
               <ul class="dropdown-menu" style="width: -10px">
                 <li class="nav-item">
-                  <a style="color: #000"  class="nav-link" href="<?php echo base_url('ecommerce/setting') ?>">Pengaturan akun</a>
+                  <a style="color: #000"  class="nav-link" href="<?php echo base_url('ecommerce/profile') ?>">Pengaturan akun</a>
                 </li>
                 <li class="nav-item">
                   <a style="color: #000"  class="nav-link" href="<?php echo base_url('landing/logout') ?>">logout</a>

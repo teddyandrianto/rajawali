@@ -54,7 +54,7 @@
 
 
       	</div>
-      		<div class="list-group-item" style="background-color: #f1f1f1">Alamat pengiriman<a href="" title="Edit Alamat" class="pull-right" ><i class="fa fa-edit"></i></a></div>
+      		<div class="list-group-item" style="background-color: #f1f1f1">Alamat pengiriman<button type="button" data-target='#alamat_edit' data-toggle='modal' title="Edit Alamat" class="pull-right" style="border-radius: 3px; background-color: #f1f1f1" ><i class="fa fa-edit"></i></button></div>
       		<div  class="list-group-item"  >
       			<p><b>Propinsi</b>
       			<span class="pull-right" id="provinsi"></span>
@@ -125,10 +125,94 @@
 	</div>
 </div>
 </div>
+
+<div class="modal fade" id="alamat_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-xs" role="document">
+    <div class="modal-content">
+      <form id="myForm" action="<?php echo base_url('ecommerce/ubah_alamat')?>" method="post">
+      <div class="modal-header">
+        <h4><b>Ubah Informasi Alamat</b></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+          <div class="modal-body">
+            <div class="box-body">
+              <div class="form-group">
+                <select id="locality-dropdown" name="provinsi" class="form-control" >
+                  <option selected="selected">blank</option>
+                </select>
+              <div class="form-group">
+               <label for="kot">Kota/Kabupaten</label>
+                <select id="locality-kota" name="kota" class="form-control" >
+              </select>
+            </div>
+            <div class="form-group">
+                <label>Alamat</label>
+                  <textarea class="form-control" name="alamat"><?= $_SESSION['login']['alamat']?></textarea>
+            </div>
+            <input type="hidden" name="url" value="<?php echo $this->uri->segment(2); ?>" >
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="submit" class="btn btn-primary">Ubah Profile</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script>
 
 <script type="text/javascript">
+
+
+
+let dropdown1 = $('#locality-dropdown');
+
+dropdown1.empty();
+
+dropdown1.append('<option selected="true" disabled>Pilih Provinsi</option>');
+dropdown1.prop('selectedIndex', 0);
+
+const url_dropdown = '<?php echo base_url() ?>ecommerce/provinsi';
+
+// Populate dropdown with list of provinces
+$.getJSON(url_dropdown, function (data) {
+  $.each(data, function (key, entry) {
+    for (var i = 0; i < entry.results.length; i++) {
+    dropdown1.append($('<option></option>').attr('value', entry.results[i].province_id).text(entry.results[i].province));
+  }
+    //console.log(entry.results[0].province_id)
+  })
+});
+
+ $('#locality-dropdown').on('change', function() {
+  let kota = $('#locality-kota');
+
+  kota.empty();
+
+  kota.append('<option selected="true" disabled>Pilih Kabupaten/Kota </option>');
+  kota.prop('selectedIndex', 0);
+
+  let kode_prov = $("#locality-dropdown option:selected").attr("value");
+  const url_kota = '<?php echo base_url() ?>/ecommerce/kota/'+kode_prov;
+
+  // Populate dropdown with list of provinces
+  $.getJSON(url_kota, function (data) {
+    $.each(data, function (key, entry) {
+      for (var i = 0; i < entry.results.length; i++) {
+      kota.append($('<option></option>').attr('value', entry.results[i].city_id).text(entry.results[i].type+" "+entry.results[i].city_name));
+    }
+    })
+  });
+
+});
+
+
+
 let dropdown = $('#provinsi');
 dropdown.empty();
 dropdown.prop('selectedIndex', 0);

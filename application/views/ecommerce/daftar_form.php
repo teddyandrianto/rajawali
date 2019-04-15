@@ -7,19 +7,23 @@
 	  <form id="myform" method="POST" action="<?php echo base_url('ecommerce/store_daftar') ?>">
 	    <div class="form-group">
 	      <label for="usr">Nama Lengkap</label>
-	      <input type="text" class="form-control" name="nama" id="nama">
+	      <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama">
 	    </div>
 	    <div class="form-group">
 	      <label for="pwd">Email</label>
-	      <input type="Email" class="form-control" name="email" id="email">
+	      <input type="Email" class="form-control" name="email" id="email" placeholder="Email">
 	    </div>
 	    <div class="form-group">
 	      <label for="pwd">Password</label>
-	      <input type="password" class="form-control" name="password" id="password">
+	      <input type="password" class="form-control" name="password" id="password" placeholder="Password">
 	    </div>
 	    <div class="form-group">
 	      <label for="pwd">Konfirmasi Password</label>
-	      <input type="password" class="form-control" name="konfirmasi_password" >
+	      <input type="password" class="form-control" name="konfirmasi_password" placeholder="Konfirmasi password">
+	    </div>
+	        <div class="form-group">
+	      <label for="pwd">Telpon</label>
+	      <input type="number" class="form-control" name="telpon"  placeholder="telpon">
 	    </div>
 	     <div class="form-group">
 	      <label for="prov">Provinsi</label>
