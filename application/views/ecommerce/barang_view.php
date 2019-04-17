@@ -39,13 +39,16 @@
 
     <div class="row">
 
-      <div class="col-lg-3">
+     <div class="col-lg-3">
 
         <h3 class="mk-5">Kategori</h3>
         <div class="list-group">
-          <a href="#" class="list-group-item">Category 1</a>
-          <a href="#" class="list-group-item">Category 2</a>
-          <a href="#" class="list-group-item">Category 3</a>
+          <?php
+            $kategori =$this->Model_ecommerce->getkategori();
+            foreach ($kategori as $kat) {
+           ?>
+          <a href="<?php echo base_url("ecommerce/filter_barang?cari_barang= &id_kategori=".$kat->id_kategori."") ?>" class="list-group-item"><?php echo $kat->kategori ?></a>
+        <?php } ?>
         </div>
 
       </div>
@@ -57,7 +60,7 @@
         
       <div class="mda media">
         <div class="media-left">
-          <img src="http://localhost/aumddy/assets/barang/jaket_new3.jpg" class="media-object img-barang" width="250">
+          <img src="<?php echo base_url('assets/ecommerce/barang/').$barang->gambar ?>" class="media-object img-barang" width="250">
         </div>
         <div class="media-body mda-body">
           <p class="judul"><?php echo $barang->nama_barang ?></p>

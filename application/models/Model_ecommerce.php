@@ -1,6 +1,17 @@
 <?php 
 class Model_ecommerce extends CI_Model {
-
+	public function verivikasi_login($email,$password) {
+	
+		$query = $this->db->query("SELECT * from tbl_user where username= '$email' and password= '$password' LIMIT 1");
+		if($query->num_rows() == 0){
+			return false;
+		}else{
+			$data = $query->row();
+			$_SESSION['login'] = array('id_user'=>$data->id_user,'username'=>$data->username,'nama'=>$data->nama,"password"=>$data->password,"role"=>$data->status,"telpon"=>$data->telpon,"alamat"=>$data->alamat,"provinsi_id"=>$data->provinsi_id,"kota_id"=>$data->kota_id);
+			return true;
+		}
+	}
+	
 	public function getbarang($value=0){
 		
 		if($value>=1){
@@ -80,6 +91,7 @@ class Model_ecommerce extends CI_Model {
 		$this->db->from('tbl_transaksi');
 		$this->db->where('id_transaksi',$id_transaksi);
 		$this->db->where('id_user',$_SESSION['login']['id_user']);
+
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -89,6 +101,7 @@ class Model_ecommerce extends CI_Model {
 		$this->db->from('tbl_transaksi');
 		$this->db->where('status>=','2');
 		$this->db->where('id_user',$_SESSION['login']['id_user']);
+		$this->db->order_by('waktu','desc');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -99,6 +112,48 @@ class Model_ecommerce extends CI_Model {
 
 	public function getcarousel(){
 		return $this->db->get('tbl_carousel')->result();
+	}
+
+	public function gettransaksi_admin(){
+		$this->db->select('tbl_transaksi.id_transaksi as id_transaksi,nama,pengiriman,nama_bank,tbl_transaksi.status as status');
+		$this->db->from('tbl_transaksi');
+		$this->db->join('tbl_user','tbl_user.id_user=tbl_transaksi.id_user');
+		$this->db->join('tbl_bank','tbl_bank.id_bank=tbl_transaksi.bank','left');
+		$this->db->where('tbl_transaksi.status>=',2);
+		$this->db->order_by('waktu','desc');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function gettotal_bayar_admin($id_transaksi){
+		$this->db->select('SUM(tbl_detail_transaksi.harga_jual*tbl_detail_transaksi.jumlah_beli) as harga_tot');
+		$this->db->from('tbl_transaksi');
+		$this->db->join('tbl_detail_transaksi','tbl_detail_transaksi.id_transaksi=tbl_transaksi.id_transaksi');
+		$this->db->where('tbl_transaksi.id_transaksi',$id_transaksi);
+		$this->db->order_by('tbl_transaksi.waktu','desc');
+		$query = $this->db->get();
+		return $query->row();
+	}
+
+	public function getdetail_transaksi_admin($transaksi){
+		$this->db->select('tbl_transaksi.id_transaksi as id_transaksi,nama,pengiriman,nama_bank,tbl_transaksi.status as status,total_bayar,bank,pengiriman,ongkir,alamat,kota_id,provinsi_id,tbl_transaksi.no_resi');
+		$this->db->from('tbl_transaksi');
+		$this->db->join('tbl_user','tbl_user.id_user=tbl_transaksi.id_user');
+		$this->db->join('tbl_bank','tbl_bank.id_bank=tbl_transaksi.bank','left');
+		$this->db->where('tbl_transaksi.id_transaksi',$transaksi);
+		$this->db->order_by('waktu','desc');
+		$query = $this->db->get();
+		return $query->row();
+	}
+
+	public function getbarang_transaksi_admin($id_transaksi){
+			$this->db->select('tbl_detail_transaksi.harga_jual as harga_jual,gambar,nama_barang,berat,jumlah_beli');
+			$this->db->from('tbl_detail_transaksi');
+			$this->db->join('tbl_barang', 'tbl_barang.id_barang = tbl_detail_transaksi.id_barang');
+			$this->db->join('tbl_transaksi', 'tbl_transaksi.id_transaksi = tbl_detail_transaksi.id_transaksi');
+			$this->db->where('tbl_transaksi.id_transaksi',$id_transaksi);
+			$this->db->order_by("tbl_detail_transaksi.id_detail_transaksi", "desc");
+			return $this->db->get()->result();
 	}
 
 

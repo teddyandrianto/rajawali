@@ -19,11 +19,11 @@
 	    </div>
 	    <div class="form-group">
 	      <label for="pwd">Konfirmasi Password</label>
-	      <input type="password" class="form-control" name="konfirmasi_password" placeholder="Konfirmasi password">
+	      <input type="password" class="form-control" name="konfirmasi_password" id="konfirmasi_password" placeholder="Konfirmasi password">
 	    </div>
 	        <div class="form-group">
 	      <label for="pwd">Telpon</label>
-	      <input type="number" class="form-control" name="telpon"  placeholder="telpon">
+	      <input type="number" class="form-control" name="telpon" id="telpon"  placeholder="telpon">
 	    </div>
 	     <div class="form-group">
 	      <label for="prov">Provinsi</label>
@@ -60,9 +60,10 @@ $("#myform").validate({
       email: true
     },
     password: "required",
-    konfirmasi_password: {
+   /* konfirmasi_password: {
       equalTo: "#password"
-    },
+    },*/
+    telpon : "required",
     id_provinsi: "required",
     id_kota: "required",
     alamat: "required"
@@ -74,9 +75,10 @@ $("#myform").validate({
       email: "Maaf masukan email anda tidak sesuai ikuti format name@domain.com"
     },
     password : "Mohon masukan password anda !",
-    konfirmasi_password : {
+   /* konfirmasi_password : {
     	equalTo: "Maaf konfirmasi password anda tidak sesuai"
-    },
+    },*/
+    telpon : "Mohon lengkapi Nomor telpon",
     id_provinsi: "Mohon pilih provinsi anda",
     id_kota: "Mohon pilih Kabupaten/Kota anda",
     alamat: "Mohon lengkapi alamat anda"

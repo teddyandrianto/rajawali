@@ -8,7 +8,7 @@
           <div class="row"> 
           <div class="col-md-2">
             <p>No transaksi</p>
-            <p class="media-heading"><?php echo $d->id_transaksi;?></p>
+            <p class="media-heading">TRX<?php echo $d->id_transaksi+100000;?></p>
           </div>
           <div class="col-md-3">
             <p>Total Tagihan</p>
@@ -18,13 +18,15 @@
             <p>Status</p>
             <p style="background-color: #6666;padding: 4px; border-radius: 3px; text-align: center;" class="media-heading"><span class="label label-default">
               <?php 
-                  if($d->status==2){
+                  if($d->status=='1'){
+                      echo "Belum dipesan";
+                  }elseif($d->status=='2'){
                       echo "Belum dibayar";
-                  }elseif ($d->status==3) {
+                  }elseif ($d->status=='3') {
                     echo "sudah dibayar";
-                  }elseif ($d->status==4) {
+                  }elseif ($d->status=='4') {
                     echo "Dalam Pengiriman";
-                  }elseif ($d->status==5) {
+                  }elseif ($d->status=='5') {
                     echo "Telah diterima";
                   }
                   ;?>

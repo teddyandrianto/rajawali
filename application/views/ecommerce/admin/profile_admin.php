@@ -11,13 +11,9 @@
         <div class="col-md-3">
           <div class="box box-primary">
             <div class="box-body box-profile">
-             <?php if ($_SESSION['login']['foto'] == '') {?>
-              <img src="<?php echo base_url('assets');?>/admin/profile/not-profile-admin.png" class="profile-user-img img-responsive img-rounded" alt="Profile picture">
-             <?php }else{ ?>
-          <img src="<?php echo base_url('assets');?>/admin/profile/<?=$_SESSION['login']['foto'];?>" class="profile-user-img img-responsive img-circle" alt="Profile picture">
-           <?php } ?>
-              
-              <h3 class="profile-username text-center"><?=$_SESSION['login']['nama_user'];?></h3>
+        
+              <img src="<?php echo base_url('assets/');?>ecommerce/admin/profile/not-profile-admin.png" class="profile-user-img img-responsive img-rounded" alt="Profile picture">
+              <h3 class="profile-username text-center"><?=$_SESSION['login']['nama'];?></h3>
               <p class="text-muted text-center">Admin</p>
             </div>
         
@@ -42,7 +38,7 @@
                   <div class="form-group">  
                     <label for="inputName" class="col-sm-2 control-label">Name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Name" value="<?=$_SESSION['login']['nama_user'];?>" maxlength="40" readonly>
+                      <input type="text" class="form-control" id="nama" name="nama" placeholder="Name" value="<?=$_SESSION['login']['nama'];?>" maxlength="40" readonly>
                     </div>
                   </div>
                   <div class="form-group">
@@ -56,7 +52,7 @@
         </div>
           <div class="box box-primary">
          <div class="box-body">
-                <form  action="<?php echo base_url('admin/update_password');?>" method="post">
+                <form  action="<?php echo base_url('ecommerce/admin_update_password');?>" method="post">
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Password Lama</label>

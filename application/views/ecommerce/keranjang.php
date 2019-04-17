@@ -7,13 +7,13 @@
         	foreach ($data as $key => $d) { ?>
         <div class="media">
         <div class="media-left">
-          <img src="http://localhost/aumddy/assets/barang/jaket_new3.jpg" class="media-object" style="width:100px ;height: 100px; margin: 0px 10px 0px 0px;">
+          <img src="<?php echo base_url('assets/ecommerce/barang/').$d->gambar ?>" class="media-object" style="width:100px ;height: 100px; margin: 0px 10px 0px 0px;">
         </div>
         <div class="media-body">
           <span>
-            <b><a href="#"><?=$d->nama_barang?></a></b>
+            <b><a href="<?php echo base_url('ecommerce/barang/').$d->id_barang ?>"><?=$d->nama_barang?></a></b>
           </span> 
-          <a href="#" class="fa fa-times pull-right"></a><br><br>
+          <a href="<?php echo base_url('ecommerce/hapus_barang_keranjang/').$d->id_detail_transaksi ?>" class="fa fa-trash-o pull-right"></a><br><br>
           <span class="btn-group">Jumlah : <?=$d->jumlah_beli?> barang</span>
           <span class="pull-right" style="color: #0c7069; font-weight: bold; font-size: 16px"><?=$d->harga_jual?> </span>
         </div>
