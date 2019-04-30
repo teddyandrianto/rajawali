@@ -5,9 +5,7 @@
         <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Barang Pesan</h3>
-
               <div class="box-tools pull-right">
-            
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -29,6 +27,7 @@
                   </div>
                 </li>
               <?php } ?>
+            </ul>
                 <!-- /.item -->
             
             </div>
@@ -101,11 +100,12 @@
             <div class="btn-group">
               <span class="btn btn-success btn-sm">Dipesan</span>
               <span class="btn btn-success btn-sm">Dibayar</span>
-              <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#input_resi">Dikirim</button>
+              <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#input">Dikirim</button>
               <span class="btn btn-default btn-sm">Diterima</span>
             </div>
           </p>
         </div>
+
         <?php }elseif ($transaksi->status=='4') { ?>
         <div class="list-group-item">
           <b>Status</b>
@@ -132,7 +132,7 @@
             </div>
             <div class="list-group-item">
               <b>No Resi</b>
-              <p class="media-heading"><?php echo $transaksi->resi; ?></p>
+              <p class="media-heading"><?php echo $transaksi->no_resi; ?></p>
             </div>
           <?php } ?>    
 
@@ -141,8 +141,9 @@
   </div>
   </section>
 </div>
+</div>
 
- <div class="modal fade" id="input_resi" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+ <div class="modal fade" id="input" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-sm role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -165,19 +166,9 @@
                   </form>
                 </div>
               </div>
-            </div>
+              </div>
 
 
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('#myTable').DataTable( {
-        "scrollCollapse": true
-    } );
-} );
-</script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
- <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script>
 
 <script type="text/javascript">
 

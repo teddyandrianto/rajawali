@@ -1,6 +1,6 @@
 <div  class="container utama">
   <div class="row" style="margin: 40px 0px 50px 0px ;">
-    <div class="col-md-10 box">
+    <div class="col-md-12 box">
       <h3>Transaksi</h3><hr>
       <?php foreach ($transaksi as $d) { ?>
       <div class="media">
@@ -19,7 +19,7 @@
             <p style="background-color: #6666;padding: 4px; border-radius: 3px; text-align: center;" class="media-heading"><span class="label label-default">
               <?php 
                   if($d->status=='1'){
-                      echo "Belum dipesan";
+                      echo "Belum dipesan";   
                   }elseif($d->status=='2'){
                       echo "Belum dibayar";
                   }elseif ($d->status=='3') {
@@ -37,7 +37,7 @@
             <p style="font-weight: bold;" class="media-heading"><?php echo $d->waktu; ?></p>
           </div>
           <div class="col-md-2"><br>
-            <a href="<?php echo base_url('ecommerce/detail_transaksi/').$d->id_transaksi ?>" class="btn btn-success btn-sm">Detail Transaksi</a>
+            <a href="<?php echo base_url('ecommerce/detail_transaksi/').$d->id_transaksi ?>" class="btn btn-warning btn-sm"><b>Detail Transaksi</b></a>
           </div>
           </div>
         </div>

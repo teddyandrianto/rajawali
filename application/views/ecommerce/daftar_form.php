@@ -15,7 +15,7 @@
 	    </div>
 	    <div class="form-group">
 	      <label for="pwd">Password</label>
-	      <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+	      <input type="password" class="form-control" name="password" id="password1" placeholder="Password">
 	    </div>
 	    <div class="form-group">
 	      <label for="pwd">Konfirmasi Password</label>
@@ -55,14 +55,18 @@
 $("#myform").validate({
   rules: {
     nama: "required",
-    email: {
-      required: true,
-      email: true
-    },
+     email: {
+          required: true,
+          email: true,
+           remote: { 
+                url: "<?php echo base_url('ecommerce/cekemail') ?>", 
+                  type: "post",
+                } 
+          },
     password: "required",
-   /* konfirmasi_password: {
-      equalTo: "#password"
-    },*/
+    konfirmasi_password: {
+      equalTo: "#password1"
+    },
     telpon : "required",
     id_provinsi: "required",
     id_kota: "required",
@@ -74,10 +78,15 @@ $("#myform").validate({
       required: "Mohon masukan email anda",
       email: "Maaf masukan email anda tidak sesuai ikuti format name@domain.com"
     },
+    email: {
+        required: "Mohon masukan email anda",
+        email: "Maaf masukan email anda tidak sesuai ikuti format name@domain.com",
+        remote: "Email sudah digunakan"
+      },
     password : "Mohon masukan password anda !",
-   /* konfirmasi_password : {
+    konfirmasi_password : {
     	equalTo: "Maaf konfirmasi password anda tidak sesuai"
-    },*/
+    },
     telpon : "Mohon lengkapi Nomor telpon",
     id_provinsi: "Mohon pilih provinsi anda",
     id_kota: "Mohon pilih Kabupaten/Kota anda",

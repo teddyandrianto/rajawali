@@ -11,11 +11,11 @@
         </div>
         <div class="media-body">
           <span>
-            <b><a href="<?php echo base_url('ecommerce/barang/').$d->id_barang ?>"><?=$d->nama_barang?></a></b>
+            <b><a style="color: #f39b01; text-decoration: none;" href="<?php echo base_url('ecommerce/barang/').$d->id_barang ?>"><?=$d->nama_barang?></a></b>
           </span> 
-          <a href="<?php echo base_url('ecommerce/hapus_barang_keranjang/').$d->id_detail_transaksi ?>" class="fa fa-trash-o pull-right"></a><br><br>
+          <a style="color: #ed4604;text-decoration: none" href="<?php echo base_url('ecommerce/hapus_barang_keranjang/').$d->id_detail_transaksi ?>" class="fa fa-trash-o pull-right"></a><br><br>
           <span class="btn-group">Jumlah : <?=$d->jumlah_beli?> barang</span>
-          <span class="pull-right" style="color: #0c7069; font-weight: bold; font-size: 16px"><?=$d->harga_jual?> </span>
+          <span class="pull-right" style="color: #f39b01; font-weight: bold; font-size: 16px"><?=$d->harga_jual?> </span>
         </div>
       </div><hr>
   <?php } ?>
@@ -116,9 +116,8 @@
             <input type="radio" name="bank" value="4">
           </span>
         </div>
-								<input type="hidden" name="total_bayar" value="550000">
 				<div class="list-group-item">
-          <button type="submit" class="btn btn-success btn-block">Bayar</button>
+          <button type="submit" class="btn btn-warning btn-block"><b>Bayar</b></button>
         </div>
 			</form>
 		</div>
@@ -157,7 +156,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        <button type="submit" class="btn btn-primary">Ubah Profile</button>
+        <button type="submit" class="btn btn-warning">Ubah Profile</button>
       </div>
       </form>
     </div>
@@ -271,7 +270,7 @@ $('#locality-service').on('change', function() {
 	  	for (var i = 0; i < entry.results[0].costs.length; i++) {
 	  		if(entry.results[0].costs[i].service==serv){
          document.form.ongkir.value = entry.results[0].costs[i].cost[0].value;
-         document.form.total_bayar.value = entry.results[0].costs[i].cost[0].value+document.form.total_belanja.value; 	
+         document.form.total_bayar.value =parseInt(entry.results[0].costs[i].cost[0].value)+parseInt(document.form.total_belanja.value); 	
   			}else{
   			
   		}

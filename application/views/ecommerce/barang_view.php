@@ -4,7 +4,7 @@
     .mda{
       padding: 25px;
       border-radius: 5px;
-      background-color: #f7f7f7;
+      background-color: #fff;
     }
     .mda-body{
       margin :0px 20px;
@@ -18,7 +18,7 @@
       margin:-10px 0px 20px 0px;
     }*/
     .harga{
-      color: #218838;
+      color: #f39b01;
       font-weight: bold;
       font-size: 30px;
     }
@@ -39,19 +39,19 @@
 
     <div class="row">
 
-     <div class="col-lg-3">
-
-        <h3 class="mk-5">Kategori</h3>
+     <div class="col-lg-3 my-4">
         <div class="list-group">
+          <p class="list-group-item" style="background-color: #f39b01; "><b>Kategori</b></p>
           <?php
             $kategori =$this->Model_ecommerce->getkategori();
             foreach ($kategori as $kat) {
            ?>
-          <a href="<?php echo base_url("ecommerce/filter_barang?cari_barang= &id_kategori=".$kat->id_kategori."") ?>" class="list-group-item"><?php echo $kat->kategori ?></a>
+          <a  style="color: #555" href="<?php echo base_url("ecommerce/filter_barang?cari_barang= &id_kategori=".$kat->id_kategori."") ?>" class="list-group-item"><?php echo $kat->kategori ?><span class=" fa fa-chevron-circle-right pull-right"></span></a>
         <?php } ?>
         </div>
 
       </div>
+
       <!-- /.col-lg-3 -->
 
       <div class="col-lg-9 my-4">
@@ -65,29 +65,29 @@
         <div class="media-body mda-body">
           <p class="judul"><?php echo $barang->nama_barang ?></p>
           <hr>
-          <p class="harga">Rp <span id="harga"><?php echo $barang->harga_jual ?></span></p>
+          <p class="harga">Rp <span id="harga"><?php echo number_format($barang->harga_jual, 0, ',', '.');?></span></p>
           <p class="stok">Stok Barang : <b>11</b> <br> Berat : <b id="berat"><?=$barang->berat ?></b> Kg</p>
           <form name="form" method="POST" action="<?php echo base_url('ecommerce/tambah_keranjang/').$this->uri->segment(3) ?>">
            <div class="btn-group">
-              <button type="button" onclick="kurang()" class="btn btn-success">
+              <button type="button" onclick="kurang()" class="btn btn-warning">
                 <span class="fa fa-minus"></span>
               </button>
-              <input type="number" class="btn col-md-3" id="hasil" name="jumlah" value="1" readonly="">
-              <button type="button" onclick="tambah()" class="btn btn-success">
+              <input type="number" class="btn col-md-3" id="hasil" name="jumlah" value="1" max="<?=$barang->stok ?>" min="1 " readonly="">
+              <button type="button" onclick="tambah()" class="btn btn-warning">
                 <span class="fa fa-plus"></span>
               </button>
             </div>
 
             <div class="media mda col-md-12">    
-              <button type="submit" class="btn btn-success btn-block btn-lg">
-                <i class="fa fa-cart-arrow-down"></i> Beli Sekarang
+              <button type="submit" class="btn btn-warning btn-block btn-lg">
+                <i class="fa fa-cart-arrow-down"></i> Masukan Keranjang
               </button><br>
             </div>   
           </form>
           <b>Deskripsi :</b>
           <?php echo $barang->deskripsi ?>
-
-          <p>Cek Ongkos kirim :</p>
+            <br>
+          <b>Cek Ongkos kirim :</b>
             <div class="row">
               <div class="col-md-4"> 
                <div class="form-group">
@@ -187,9 +187,9 @@ $.getJSON(url, function (data) {
  $('#locality-kota').on('change', function() {
     let kota = $('#etimilasi');
     let jum = document.form.hasil.value;
-    let brt = $("#berat").text();
+    let brt = <?php echo $barang->berat ?>;
     let totbrt = jum*brt*1000;
-    let harga = $("#harga").text();
+    let harga = <?php echo $barang->harga_jual ?>;
     let harga_tot = harga*jum;
 
   kota.empty();
@@ -206,7 +206,7 @@ $.getJSON(url, function (data) {
   $.getJSON(url_kota, function (data) {
     $.each(data, function (key, entry) {
       for (var i = 0; i < entry.results[0].costs.length; i++) {
-      kota.append($('<tbody><tr><td>'+entry.results[0].costs[i].service +'</td><td>'+entry.results[0].costs[i].cost[0].etd +'</td><td>'+entry.results[0].costs[i].cost[0].value +'</td><td>'+harga_tot +'</td><td>'+(entry.results[0].costs[i].cost[0].value+harga_tot) +'</td></tr></tbody></table>')
+      kota.append($('<tbody><tr><td>'+entry.results[0].costs[i].service +'</td><td>'+entry.results[0].costs[i].cost[0].etd +' Hari</td><td>'+entry.results[0].costs[i].cost[0].value +'</td><td>'+harga_tot +'</td><td>'+(entry.results[0].costs[i].cost[0].value+harga_tot) +'</td></tr></tbody></table>')
         );
     }
     })

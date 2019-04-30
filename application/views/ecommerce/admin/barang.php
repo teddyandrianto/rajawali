@@ -5,7 +5,8 @@
          <div class="box">
             <div class="box-header">
               <h4>Data Barang</h4>
-              <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#tambah"><span class="fa fa-plus"></span> Tambah Barang </button>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambah"><span class="fa fa-plus"></span> Tambah Barang </button>
+                      <button class="btn btn-info pull-right" type="button" data-toggle="modal" data-target="#filter"><span class="fa fa-print"> </span> Laporan barang keluar</button>
             </div>
             <div class="box-body">
               <table id="myTable" class="table table-bordered table-hover" width="100%">
@@ -239,6 +240,29 @@
     </div>
   </section>
 </div>
+
+
+     <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="box-header with-border">   
+                    <h3 class="box-title">Filter Data Barang Keluar</h3>
+                  </div>
+                  <div class="modal-body"> 
+                    <form action="<?php echo base_url('ecommerce/admin_barang') ?>" method="GET">
+                      <div class="form-group">
+                        <label>Bulan</label>
+                        <input type="month" name="date" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <button style="margin-top: 25px" class="btn btn-block" name="cetak" value="1">Cetak <i class="fa fa-print "></i></button>
+                        <button style="margin-top: 25px" class="btn btn-success btn-block" name="export" value="1">Export Excel <i class="glyphicon glyphicon-equalizer"></i></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 <script type="text/javascript">
   $(document).ready(function() {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Kasir | Elektronik</title>
+  <title>Admin | Online Shop</title>
   <link rel="shortcut icon" href="<?php echo base_url('assets/assets/landing/img/lOGO_KE.png') ?>">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,8 +26,8 @@
 
   <header class="main-header">
     <a href="<?php echo base_url('admin')?>" class="logo">
-      <span class="logo-mini"><b>K</b>E</span>
-      <span class="logo-lg"><b>Kasir </b>Elektronik</span>
+      <span class="logo-mini"><b>A</b>O</span>
+      <span class="logo-lg"><b>Admin </b>Online Shop</span>
     </a>
     <nav class="navbar navbar-static-top">
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
@@ -91,8 +91,8 @@
           </a>
         </li>
          <li>
-          <a href="<?php echo base_url('ecommerce/admin_pegawai') ?>">
-            <i class="fa fa-users"></i> <span>Pegawai</span>
+          <a href="<?php echo base_url('ecommerce/admin_pembeli') ?>">
+            <i class="fa fa-users"></i> <span>Pembeli</span>
           </a>
         </li>
          <li class="header">MAIN PROFIL</li>
@@ -102,7 +102,7 @@
           </a>
         </li>
          <li>
-          <a href="<?php echo base_url('landing/logout') ?>">
+          <a href="<?php echo base_url('ecommerce/logout') ?>">
             <i class="fa fa-sign-out"></i> <span>Logout</span>
           </a>
         </li>

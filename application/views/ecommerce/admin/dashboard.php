@@ -15,7 +15,17 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>150</h3>
+              <h3><?php 
+                  $this->db->select('count(id_transaksi) as dat');
+    $this->db->from('tbl_transaksi');
+   
+    $this->db->where('DATE_FORMAT(waktu,"%Y-%m")=',date('Y-m'));
+    $this->db->where('status>=',3);
+    $this->db->where('status<=',5);
+    
+    echo $this->db->get()->row()->dat;
+
+              ?> Transaksi</h3>
 
               <p>Jumlah Transaksi Bulan ini</p>
             </div>
@@ -28,7 +38,8 @@
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+              <h3>Rp <?php echo number_format($sum_data->harga_jual-$sum_data->harga_beli, 0, ',', '.') ?></h3>
 
               <p>Keuntungan Bulan ini</p>
             </div>
@@ -41,9 +52,9 @@
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3>44</h3>
+              <h3><?php echo $sum_data->jumlah_beli ?> Barang</h3>
 
-              <p>Jumlah Keluar Bulan ini</p>
+              <p>Jumlah barang terjual Bulan ini</p>
             </div>
            
             <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>

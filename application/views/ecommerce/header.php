@@ -7,9 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
-  <title>Shop Homepage - Start Bootstrap Template</title>
-
+  <link rel="stylesheet" type="text/css" href="">
+  <title>Rajawali | Online Shop</title>
+  <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url('assets/ecommerce/img/logo1.png') ?>" />
   <!-- Bootstrap core CSS -->
   <link href="<?php echo base_url('assets/ecommerce/') ?>vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
@@ -58,7 +58,7 @@
     color: #218838;
   }
   .shop-tot{
-    background-color: #218838;
+    background-color: #f39b01;
     border-radius: 4px;
     padding: 1px;
     color :#fff;
@@ -68,7 +68,7 @@
   .box-daftar{
     margin: 10px;
     border-color: #000;
-    background-color: #f7f7f7;
+    background-color: #fff;
     margin-bottom: 100px;
     border-radius: 5px;    
   }
@@ -79,7 +79,7 @@
 }
 .box {
     position: relative;
-    background-color: #f7f7f7;
+    background-color: #fff;
     padding: 10px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
@@ -99,15 +99,58 @@
   }
 }
 }
+
+   
+   .thumbnail:hover{ 
+    opacity: 1;
+    transform: rotate(0);
+    background: rgba(0,0,0,.05);
+  }
+
+    .thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: border .2s ease-in-out;
+       -o-transition: border .2s ease-in-out;
+          transition: border .2s ease-in-out;
+}
+.thumbnail > img,
+.thumbnail a > img {
+  margin-right: auto;
+  margin-left: auto;
+}
+a.thumbnail:hover,
+a.thumbnail:focus,
+a.thumbnail.active {
+  border-color: #337ab7;
+}
+.thumbnail .caption {
+  padding: 9px;
+  color: #333;
+}
+.thumbnail > img,
+.thumbnail a > img,
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
   </style>
 </head>
 
-<body>
+<body style="background-color: #f9f9f9;">
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="<?php echo base_url('ecommerce') ?>">Rajawali</a>
+      <img src="<?php  echo base_url('assets/ecommerce/img/logo1.png')?>" width='40px'> 
+      <a class="navbar-brand" href="<?php echo base_url('ecommerce') ?>">&nbsp;Rajawali</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -116,9 +159,9 @@
           <input type="text" class="form-control serch" name="cari_barang" value="<?php echo $this->input->get('cari_barang') ?>" placeholder="Search" required>
       </form>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
+       <!--    <li class="nav-item">
             <a class="nav-link" href="#">About</a>
-          </li>
+          </li> -->
           <?php if(isset($_SESSION['login']) AND $_SESSION['login']['role']==2){ ?>
           <li class="dropdown">
             <a class="nav-link shop-tot" data-toggle="dropdown" href="#"><span class="fas fa-shopping-cart"></span><span class="shop-tot"> <?php echo $this->Model_ecommerce->getkeranjang('sum') ?></span></a>
@@ -155,16 +198,16 @@
                   <a style="color: #000"  class="nav-link" href="<?php echo base_url('ecommerce/profile') ?>">Pengaturan akun</a>
                 </li>
                 <li class="nav-item">
-                  <a style="color: #000"  class="nav-link" href="<?php echo base_url('landing/logout') ?>">logout</a>
+                  <a style="color: #000"  class="nav-link" href="<?php echo base_url('ecommerce/logout') ?>">logout</a>
                 </li>
              </ul>
           </li>
           <?php }else{ ?>
           <li class="dropdown">
-            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">Login</a>
+            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#"><i class="fa fa-sign-in"></i> Login</a>
             <ul class="dropdown-menu">
              <div class="box-login">
-               <form action="<?php echo base_url('landing/autentifikasi_login') ?>" method="POST" >
+               <form action="<?php echo base_url('ecommerce/autentifikasi_login') ?>" method="POST" >
                  <div class="form-group">
                   <label for="email">Email address:</label>
                   <input type="email" class="form-control" id="username" name="email">
@@ -179,7 +222,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?php echo base_url('ecommerce/daftar') ?>">Daftar</a>
+            <a class="nav-link" href="<?php echo base_url('ecommerce/daftar') ?>"><i class="fa fa-sign-up"></i> Daftar</a>
           </li>
         <?php } ?>
         </ul>

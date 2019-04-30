@@ -2,8 +2,8 @@
 	<div class="row" style="margin: 40px 0px 50px 0px ;">
 	  <div class="col-md-8 " style="background-color: #f1f1f1;">
       <div style="margin-top: 30px">
-        <span style="font-weight: bold; color: #0c7069; font-size:20px">Informasi Umum</span>
-        <button type="submit" class="pull-right btn btn-success btn-sm" data-toggle='modal' data-target='#exampleModalCenter2'>Ubah informasi umum</button>
+        <span style="font-weight: bold; color: #f39b01; font-size:20px">Informasi Umum</span>
+        <button type="submit" class="pull-right btn btn-warning btn-sm" data-toggle='modal' data-target='#exampleModalCenter2'><b>Ubah informasi umum</b></button>
       </div><hr>
       <div class="panel-body">
       
@@ -26,8 +26,8 @@
           </div>
         </div><hr>
         <div style="margin-top: 30px">
-        <span style="font-weight: bold; color: #0c7069; font-size:20px">Informasi Alamat</span>
-        <button type="submit" class="pull-right btn btn-success btn-sm" data-toggle='modal' data-target='#alamat'>Ubah alamat</button>
+        <span style="font-weight: bold; color: #f39b01; font-size:20px">Informasi Alamat</span>
+        <button type="submit" class="pull-right btn btn-warning btn-sm" data-toggle='modal' data-target='#alamat'><b>Ubah alamat</b></button>
       </div><hr>
       <div class="panel-body">
         <div class="row">
@@ -50,8 +50,8 @@
       </div>
       <hr>
         <div style="margin-top: 30px">
-        <span style="font-weight: bold; color: #0c7069; font-size:20px">Password</span>
-        <button type="submit" class="pull-right btn btn-success btn-sm" data-toggle='modal' data-target='#password_edit'>Ubah Password</button>
+        <span style="font-weight: bold; color: #f39b01; font-size:20px">Password</span>
+        <button type="submit" class="pull-right btn btn-warning btn-sm" data-toggle='modal' data-target='#password_edit'><b>Ubah Password</b></button>
       </div><hr>
 	   </div>
   </div>
@@ -78,7 +78,7 @@
               </div>
               <div class="form-group">
                 <label>Telpon</label>
-                <input type="text" class="form-control" name="telpon" value="<?php echo $_SESSION['login']['telpon']?>" placeholder="Masukan Nomor Telpon">
+                <input type="number" class="form-control" name="telpon" value="<?php echo $_SESSION['login']['telpon']?>" placeholder="Masukan Nomor Telpon">
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        <button type="submit" class="btn btn-primary">Ubah Profile</button>
+        <button type="submit" class="btn btn-warning">Ubah Profile</button>
       </div>
       </form>
     </div>
@@ -123,7 +123,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        <button type="submit" class="btn btn-primary">Ubah Profile</button>
+        <button type="submit" class="btn btn-warning">Ubah Profile</button>
       </div>
       </form>
     </div>
@@ -158,7 +158,7 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-        <button type="submit" class="btn btn-primary">Ubah Profile</button>
+        <button type="submit" class="btn btn-warning">Ubah Profile</button>
       </div>
       </form>
     </div>

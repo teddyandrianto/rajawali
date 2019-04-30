@@ -6,15 +6,15 @@
           foreach ($barang as $key => $d) { ?>
         <div class="media">
         <div class="media-left">
-          <img src="http://localhost/aumddy/assets/barang/jaket_new3.jpg" class="media-object" style="width:100px ;height: 100px; margin: 0px 10px 0px 0px;">
+          <img src="<?php echo base_url('assets/ecommerce/barang/').$d->gambar ?>" class="media-object" style="width:100px ;height: 100px; margin: 0px 10px 0px 0px;">
         </div>
         <div class="media-body">
           <span>
-            <b><a href="#"><?=$d->nama_barang?></a></b>
+            <b><a style="color: #f39b01; text-decoration: none;" href="#"><?php echo $d->nama_barang;?></a></b>
           </span> 
-          
-          <span class="btn-group">Jumlah : <?=$d->jumlah_beli?> barang</span>
-          <span class="pull-right" style="color: #0c7069; font-weight: bold; font-size: 16px"><?=$d->harga_jual?> </span>
+          <br>
+          <p class="btn-group">Jumlah : <?=$d->jumlah_beli?> barang</p>
+          <span class="pull-right" style="color: #f39b01; font-weight: bold; font-size: 16px">Rp <?php echo number_format($d->harga_jual, 0, ',', '.');?></span>
         </div>
       </div><hr>
   <?php } ?>
@@ -70,8 +70,8 @@
             </div>
           </p>
         </div>
-        <div class="list-group-item"><b>No Resi</b><p class="media-heading"><?php echo $row->resi; ?></p></div>
-          <div class="list-group-item"><a href="<?php echo base_url('index.php/web/admin_transaksi_terima/').$row->id_transaksi ?>" class="btn btn-primary btn-sm btn-block">Diterima</a></div>
+        <div class="list-group-item"><b>No Resi</b><p class="media-heading"><?php echo $transaksi->no_resi; ?></p></div>
+          <div class="list-group-item"><a href="<?php echo base_url('ecommerce/update_status_transaksi_diterima/5/').$transaksi->id_transaksi ?>" class="btn btn-warning btn-sm btn-block"><b>Diterima</b></a></div>
           <?php }elseif ($transaksi->status=='5') { ?>
             <div class="list-group-item"><b>Status</b>
               <p class="media-heading">
@@ -85,7 +85,7 @@
             </div>
             <div class="list-group-item">
               <b>No Resi</b>
-              <p class="media-heading"><?php echo $transaksi->resi; ?></p>
+              <p class="media-heading"><?php echo $transaksi->no_resi; ?></p>
             </div>
           <?php } ?>            
            <div class="list-group-item">

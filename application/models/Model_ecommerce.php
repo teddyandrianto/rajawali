@@ -18,14 +18,14 @@ class Model_ecommerce extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
 		$this->db->where('id_barang',$value);
-		$this->db->order_by("id_barang", "asc");
+		$this->db->order_by("id_barang", "DESC");
 		$query = $this->db->get();
 		return $query->row();
 		}else{
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
 		$this->db->join('tbl_kategori_barang','tbl_kategori_barang.id_kategori=tbl_barang.id_kategori');
-		$this->db->order_by("id_barang", "asc");
+		$this->db->order_by("id_barang", "DESC");
 		$query = $this->db->get();
 
 		return $query->result();
@@ -62,16 +62,17 @@ class Model_ecommerce extends CI_Model {
 		}
 	}
 
-	public function getfilterbarang($nama='',$id_kategori='',$min=0,$max=0){
+	public function getfilterbarang($nama,$id_kategori,$min=0,$max=0){
 		$this->db->select('*');
 		$this->db->from('tbl_barang');
 		$this->db->like('nama_barang',$nama);
-		$this->db->like('id_barang',$id_kategori);
+		$this->db->where('id_kategori',$id_kategori);
+		
 		if($max>0 AND $min<=$max){
 		$this->db->where('harga_jual>=',$min);
 		$this->db->where('harga_jual<=',$max);
 		}
-		$this->db->order_by("id_barang", "desc");
+		$this->db->order_by("id_barang", "asc");
 		$query = $this->db->get();
 
 		return $query->result();
@@ -120,6 +121,7 @@ class Model_ecommerce extends CI_Model {
 		$this->db->join('tbl_user','tbl_user.id_user=tbl_transaksi.id_user');
 		$this->db->join('tbl_bank','tbl_bank.id_bank=tbl_transaksi.bank','left');
 		$this->db->where('tbl_transaksi.status>=',2);
+		$this->db->where('tbl_transaksi.status<=',5);
 		$this->db->order_by('waktu','desc');
 		$query = $this->db->get();
 		return $query->result();
@@ -154,6 +156,52 @@ class Model_ecommerce extends CI_Model {
 			$this->db->where('tbl_transaksi.id_transaksi',$id_transaksi);
 			$this->db->order_by("tbl_detail_transaksi.id_detail_transaksi", "desc");
 			return $this->db->get()->result();
+	}
+
+	public function getpembeli(){
+		$this->db->select('*');
+		$this->db->from('tbl_user');
+		$this->db->where('status',0);
+		$this->db->or_where('status',2);
+		return $this->db->get()->result();
+	}
+
+	public function getlaporan_barang($date=0){
+		$this->db->select('tbl_detail_transaksi.harga_jual,tbl_detail_transaksi.harga_beli,jumlah_beli,nama_barang,tbl_transaksi.waktu');
+		$this->db->from('tbl_detail_transaksi');
+		$this->db->join('tbl_transaksi','tbl_transaksi.id_transaksi=tbl_detail_transaksi.id_transaksi');
+		$this->db->join('tbl_barang','tbl_barang.id_barang=tbl_detail_transaksi.id_barang');
+		$this->db->where('DATE_FORMAT(tbl_transaksi.waktu,"%Y-%m")=',$date);
+		$this->db->where('tbl_transaksi.status>=',3);
+		$this->db->where('tbl_transaksi.status<=',5);
+		return $this->db->get()->result();
+	}
+
+	public function getlaporan_barang_sum($date=0){
+
+		$sum = "SUM(tbl_detail_transaksi.jumlah_beli*tbl_detail_transaksi.harga_jual) AS harga_jual,
+		SUM(tbl_detail_transaksi.jumlah_beli*tbl_detail_transaksi.harga_beli) AS harga_beli,
+		SUM(tbl_detail_transaksi.jumlah_beli) AS jumlah_beli ,sum((harga_jual-harga_beli)*jumlah_beli) as keuntungan";
+		$this->db->select($sum);
+		$this->db->from('tbl_detail_transaksi');
+		$this->db->join('tbl_transaksi','tbl_transaksi.id_transaksi=tbl_detail_transaksi.id_transaksi');
+		$this->db->where('DATE_FORMAT(tbl_transaksi.waktu,"%Y-%m")=',$date);
+		$this->db->where('tbl_transaksi.status>=',3);
+		$this->db->where('tbl_transaksi.status<=',5);
+
+		return $this->db->get()->row();
+	}
+
+	public function cekemail($email){
+		$this->db->select('username');
+		$this->db->where('username',$email);
+		$query = $this->db->get('tbl_user');
+		if($query->num_rows() == 0){
+			return true;	
+		}else{
+			return false;
+		}
+		
 	}
 
 
